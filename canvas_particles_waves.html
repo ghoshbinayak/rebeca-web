@@ -4,33 +4,229 @@
 		<title>three.js canvas - particles - waves</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+</style>
 	</head>
 	<body>
             <div id="container"></div>
                 <script type="x-shader/x-vertex" id="vshader">
-                    /**
-                     * Multiply each vertex by the
-                     * model-view matrix and the
-                     * projection matrix (both provided
-                     * by Three.js) to get a final
-                     * vertex position
-                     */
+                    varying float pAlpha;
+                    uniform float time;
+                    uniform float extraTime;
+                    uniform vec4 stepTimes;
+                    uniform vec4 stepExtraTimes;
+                    uniform float animationRatio;
+                    uniform float focusRatio;
+                    uniform float amountPerDegree;
+                    uniform float opacity;
+                    uniform float fading;
+                    uniform float dpi;
 
-                    // create a shared variable for the
-                    // VS and FS containing the normal
-                    varying vec3 vNormal;
-                    attribute float displacement;
-                    uniform float amplitude;
+
+                    //
+                    // Description : Array and textureless GLSL 2D simplex noise function.
+                    //      Author : Ian McEwan, Ashima Arts.
+                    //  Maintainer : ijm
+                    //     Lastmod : 20110822 (ijm)
+                    //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
+                    //               Distributed under the MIT License. See LICENSE file.
+                    //               https://github.com/ashima/webgl-noise
+                    // 
+
+                    vec3 mod289(vec3 x) {
+                      return x - floor(x * (1.0 / 289.0)) * 289.0;
+                    }
+
+                    vec2 mod289(vec2 x) {
+                      return x - floor(x * (1.0 / 289.0)) * 289.0;
+                    }
+
+                    vec3 permute(vec3 x) {
+                      return mod289(((x*34.0)+1.0)*x);
+                    }
+
+                    float snoise(vec2 v)
+                      {
+                      const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                                          0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                                         -0.577350269189626,  // -1.0 + 2.0 * C.x
+                                          0.024390243902439); // 1.0 / 41.0
+                    // First corner
+                      vec2 i  = floor(v + dot(v, C.yy) );
+                      vec2 x0 = v -   i + dot(i, C.xx);
+
+                    // Other corners
+                      vec2 i1;
+                      //i1.x = step( x0.y, x0.x ); // x0.x > x0.y ? 1.0 : 0.0
+                      //i1.y = 1.0 - i1.x;
+                      i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                      // x0 = x0 - 0.0 + 0.0 * C.xx ;
+                      // x1 = x0 - i1 + 1.0 * C.xx ;
+                      // x2 = x0 - 1.0 + 2.0 * C.xx ;
+                      vec4 x12 = x0.xyxy + C.xxzz;
+                      x12.xy -= i1;
+
+                    // Permutations
+                      i = mod289(i); // Avoid truncation effects in permutation
+                      vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                                    + i.x + vec3(0.0, i1.x, 1.0 ));
+
+                      vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                      m = m*m ;
+                      m = m*m ;
+
+                    // Gradients: 41 points uniformly over a line, mapped onto a diamond.
+                    // The ring size 17*17 = 289 is close to a multiple of 41 (41*7 = 287)
+
+                      vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                      vec3 h = abs(x) - 0.5;
+                      vec3 ox = floor(x + 0.5);
+                      vec3 a0 = x - ox;
+
+                    // Normalise gradients implicitly by scaling m
+                    // Approximation of: m *= inversesqrt( a0*a0 + h*h );
+                      m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+
+                    // Compute final noise value at P
+                      vec3 g;
+                      g.x  = a0.x  * x0.x  + h.x  * x0.y;
+                      g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                      return 130.0 * dot(m, g);
+                    }
+
+                    float PI = 3.14159265358979323846264;
+                    /*EVAL THREE.ShaderChunk['snoise2d'];*/
+
+                    float clampNorm(float val, float min, float max) {
+                        return clamp((val - min) / (max - min), 0.0, 1.0);
+                    }
+
+                    float easeOutBack(float t) {
+                        return ((t=t-1.)*t*((2.70158)*t + 1.70158) + 1.);
+                    }
 
                     void main() {
+                        vec3 pos = position;
+                        float baseAngle = atan(pos.y, pos.x);
+                        float baseRadius = sqrt(pos.x * pos.x + pos.y * pos.y) - 1.0;
 
-                      vNormal = normal;
+                        // 9 groups
+                        float group = mod(floor(baseRadius * amountPerDegree), 9.0);
+                        float angle = baseAngle;
+                        float radius = baseRadius * 30.0 + 155.0;
+                        float angleFinalOffset = (time + extraTime) * .1;
+                        float tmpRatio;
+                        float tmp;
+                        pAlpha = 1.0;
 
-                      vec3 newPosition =  position + normal * vec3(displacement*amplitude);
-                      gl_Position = projectionMatrix *
-                                    modelViewMatrix *
-                                    vec4(newPosition,1.0);
+                        // tmpRatio = clampNorm(animationRatio, 0., 1.);
+                        tmpRatio = 1.;//easeOutBack(clamp(1. - abs(animationRatio - 2.), 0., 1.));
+                        float stepTime = time;// stepTimes.x + stepExtraTimes.x;
+                        if(group > 2.) {
+                            if(angle > PI / 2.0) {
+                                tmp = PI;
+                            } else if(angle < -PI / 2.0) {
+                                tmp = -PI;
+                            } else {
+                                tmp = 0.;
+                            }
+
+                            angle = mix(angle, mix(angle, tmp, .85), (tmpRatio + snoise(position.xy * 30. + time * (.1 + group * .03))) * tmpRatio / 2.);
+                            radius += ((snoise(position.xy * 15.) * 2. - 1.) * (sin(radius * group * 3.0) + 1.) * 10. + 18.)* tmpRatio;
+                            angleFinalOffset += (mod(group, 3.) * .01 * mod(group, 2.) ) * (tmpRatio  + stepTime);
+
+                        } else {
+                            angleFinalOffset += (group * .02) * (tmpRatio  + stepTime);
+                            // angle += time * tmpRatio * .2;
+                            radius += (30. + snoise(position.xy * 400.) * 20. * group  + (baseRadius - .5) * (50. + group * 20. + abs(cos(baseAngle)) * snoise(position.xy * 200.) *30.)) * tmpRatio;
+                        }
+
+                        tmpRatio = clampNorm(animationRatio, 2., 3.);
+                        radius = mix(radius, 150. + baseRadius * (255. + group * 10.), easeOutBack(pow(tmpRatio, 1. + group * .2 + snoise(position.xy * 312.))));
+                        radius += clampNorm(baseRadius, .75, 1.) * 100. * snoise(position.xy * 230. + 15.) * tmpRatio;
+                        tmpRatio = clampNorm(animationRatio, 3., 4.);
+                        radius *= 1.0 + tmpRatio * abs(snoise(position.xy * 35. + 41.));
+
+                        // focus
+                        angle -= focusRatio * PI * (.1 + group * .03);
+                        radius = mix(radius, 160., (easeOutBack(focusRatio) * .8 + snoise(position.xy * 200.0) * .3) * pow(abs(easeOutBack(focusRatio)), 1.0 + group));
+
+                        pos.x = sin(angle) * radius;
+                        pos.y = cos(angle) * radius;
+
+                        tmpRatio = 1.;//clampNorm(animationRatio, 1., 2.);
+                        pos.x += (snoise(position.xy *90. + time * .3) * 10.) * (tmpRatio - (focusRatio));
+                        pos.y += (snoise(position.xy *90. + time * .3 + 2.)  * 10.) * (tmpRatio - (focusRatio));
+
+                        angleFinalOffset += .1 * (tmpRatio  + stepTime);
+                        pos.x += snoise(position.xy * 100.0) * 3.0;
+                        pos.y += snoise(position.xy * 100.0 + 3.0) * 3.0;
+
+
+
+                        tmpRatio = clampNorm(animationRatio, 3., 4.);
+                        pos.x += tmpRatio * (abs(snoise(position.xy * 26. + 31.)) - .5) * 20.;
+                        pos.y += tmpRatio * (abs(snoise(position.xy * 41. + 26.)) - .5) * 20.;
+
+
+
+                        angle = atan(pos.y, pos.x) + angleFinalOffset;
+                        radius = sqrt(pos.x * pos.x + pos.y * pos.y);
+                        pos.x = sin(angle) * radius;
+                        pos.y = cos(angle) * radius;
+
+
+                        tmpRatio = 1.;//clampNorm(animationRatio, 1., 2.);
+                        if(group > 1.) {
+                            pAlpha = tmpRatio;
+                        }
+
+                        tmpRatio = 1.;//clamp(1. - abs(animationRatio - 2.), 0., 1.);
+                        if(mod(group, 3.) > 0.) {
+                            pAlpha -= sin((radius + snoise(position.xy * 12.) * 10.0) * mix(.2, .25, tmpRatio)) / pow(1.0 + baseRadius, 3.0) * tmpRatio;
+                        }
+
+
+                        tmpRatio = clampNorm(animationRatio, 2., 3.);
+                        pAlpha *= 1. - tmpRatio * .4;
+                        tmpRatio = clampNorm(animationRatio, 3.75, 4.);
+
+                        pAlpha *= 1. - tmpRatio;
+                        tmpRatio = clampNorm(animationRatio, 0., 1.);
+                        angle = mod(angle + PI * 2., PI * 2.);
+
+                        float maskCenterAngle = mod(time * 2. + PI, PI * 2.);
+                        float deltaAngle = mod(angle - maskCenterAngle + PI * 2., PI * 2.);
+                        float maskStart = tmpRatio * PI / 2.;
+                        float maskEnd = PI / 3. + tmpRatio * PI;
+                        float alpha = 1. - clampNorm( step(0., deltaAngle) * deltaAngle + (1. - step(0., deltaAngle)) * (deltaAngle + PI * 2.), maskStart, maskEnd);
+
+                        maskStart = PI * 2. - tmpRatio * PI / 2.;
+                        maskEnd = PI * 2. - PI / 3. - tmpRatio * PI;
+                        alpha += 1. - clampNorm( step(0., deltaAngle) * deltaAngle + (1. - step(0., deltaAngle)) * (deltaAngle + PI * 2.), maskStart, maskEnd);
+
+                        pAlpha *= pow(clamp(alpha, 0., 1.), 1. + group * .2);
+
+                        tmpRatio = step(.2, animationRatio) * clamp(1. - abs(animationRatio + 2. - 2.), 0., 1.);
+
+                        if(tmpRatio > .0 && radius < tmpRatio * 155.) {
+                            pAlpha = .0;
+
+                        }
+
+                        pAlpha = clamp(pAlpha, .0, 1.0) * .2 * opacity * fading;
+                        vec4 modelViewPos = modelViewMatrix * vec4( pos, 1.0 );
+                        float distanceToCamera = sqrt(modelViewPos.x * modelViewPos.x + modelViewPos.y * modelViewPos.y + modelViewPos.z * modelViewPos.z);
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4( pos, 1.0 );
+                        gl_PointSize = 1. * dpi;
+
                     }
+
                 </script>
 
                 <script type="x-shader/x-fragment" id="fshader">
@@ -41,91 +237,121 @@
                      * runs from 0.0 to 1.0
                      */
                     // same name and type as VS
-                    varying vec3 vNormal; 
-                    void main(){
-                    // calc the dot product and clamp
-                      // 0 -> 1 rather than -1 -> 1
-                      vec3 light = vec3(0.5, 0.2, 1.0);
 
-                      // ensure it's normalized
-                      light = normalize(light);
+                    varying float pAlpha;
 
-                      // calculate the dot product of
-                      // the light to the vertex normal
-                      float dProd = max(0.0,
-                                        dot(vNormal, light));
-                                            
-                        gl_FragColor = vec4(dProd, // R
-                                            dProd, // G
-                                            dProd, // B
-                                            1.0);  // A
+                    void main() {
+                        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+                        gl_FragColor.a *= pAlpha;
                     }
+
                 </script>
 
 		<script src="js/three.js"></script>
-		<script src="js/renderers/Projector.js"></script>
 		<script src="js/renderers/CanvasRenderer.js"></script>
-		<script src="js/libs/stats.min.js"></script>
+                <script src="js/EKTweener.min.js"></script>
 
 		<script type="text/javascript">
                         var container;
 
-			var camera, scene, renderer;
-
-			var cube;
+			var camera, scene, renderer, uniforms;
 
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
-
-                        var uniforms = {
-                          amplitude: {
-                            type: 'f', // a float
-                            value: 0
-                          }
-                        };
-
+                        
+                        var STEP_CIRCLE_PARTICLE_AMOUNT_PER_DEGREE = 100;
+                        var s;
+                        var offsetLeft = 0, 
+                            offsetTop = 35, 
+                            currentStep = 0;
 			function init() {
 
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
-
-				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 3000 );
                         	camera.position.y = 150;
-				camera.position.z = 500;
-
-                                
+				camera.position.z = 439;
 
 				scene = new THREE.Scene();
 
 				// The Object
-				var geometry = new THREE.BoxGeometry( 200, 200, 200 );
-                                var shereGeometry = new THREE.SphereBufferGeometry(200, 20 , 20);
+                                var particles = new THREE.Geometry();
+
+                                /*
+                                for(var i = 0; i < 36000; i++) {
+                                    particles.vertices.push(new THREE.Vector3( i, 0, 0));
+                                }
+                                */
+
+                                var nVertices = STEP_CIRCLE_PARTICLE_AMOUNT_PER_DEGREE*360;
+                                var a, u;
+                                var r = particles.vertices;
+                                var s = STEP_CIRCLE_PARTICLE_AMOUNT_PER_DEGREE;
+                                for (var i = 0; i < nVertices; i++){
+                                        a = i / 180 * Math.PI;
+                                        u = 1 + ~~(i / nVertices * s) / s;
+                                        r.push(new THREE.Vector3(Math.sin(a) * u, Math.cos(a) * u, 0));
+                                }
                                 var vShader = document.getElementById('vshader').innerHTML;
                                 var fShader = document.getElementById('fshader').innerHTML;
-
-                                var material =
-                                  new THREE.ShaderMaterial({
-                                    uniforms: uniforms,
-                                    vertexShader:   vShader,
-                                    fragmentShader: fShader
-                                });
-
-				sphere = new THREE.Mesh( shereGeometry, material );
-                            	sphere.position.y = 150;
-
-                                // now populate the array of attributes
-                                var verts = sphere.geometry.attributes.position.count;
-
-                                var displacement = new Float32Array(verts);
-
-                                for (var v = 0; v < verts; v++) {
-                                  displacement[v] = (Math.random() * 70);
+                                uniforms = {
+                                    amountPerDegree: {
+                                        type: "f",
+                                        value: 100 
+                                    },
+                                    time: {
+                                        type: "f",
+                                        value: 0
+                                    },
+                                    extraTime: {
+                                        type: "f",
+                                        value: 0
+                                    },
+                                    animationRatio: {
+                                        type: "f",
+                                        value: 0
+                                    },
+                                    focusRatio: {
+                                        type: "f",
+                                        value: 0
+                                    },
+                                    opacity: {
+                                        type: "f",
+                                        value: 1
+                                    },
+                                    fading: {
+                                        type: "f",
+                                        value: 0
+                                    },
+                                    dpi: {
+                                        type: "f",
+                                        value: window.devicePixelRatio || 1
+                                    },
+                                    stepTimes: {
+                                        type: "v4",
+                                        value: new THREE.Vector4(0, 0, 0, 0)
+                                    },
+                                    stepExtraTimes: {
+                                        type: "v4",
+                                        value: new THREE.Vector4(0, 0, 0, 0)
+                                    }
                                 }
+                                var material =
+                                    new THREE.ShaderMaterial({
+                                    vertexShader:   vShader,
+                                    fragmentShader: fShader,
+                                    uniforms: uniforms,
+                                    blending: THREE.AdditiveBlending,
+                                    transparent: !0,
+                                    depthTest: !1
+                                });
                                 
-                                sphere.geometry.addAttribute('displacement', new THREE.BufferAttribute(displacement, 1));
-                                
+                                particleSystem = new THREE.Points( particles, material );
 
-				scene.add( sphere );
+                                
+                                // now populate the array of attributes
+                                particleSystem.position.y = 200;
+				scene.add( particleSystem );
 
 				renderer = new THREE.WebGLRenderer();
 				renderer.setClearColor( 0x000 );
@@ -134,22 +360,29 @@
 				container.appendChild( renderer.domElement );
 
 			}
-                        
-                        var frame = 0;
-			function animate() {
-                                uniforms.amplitude.value = Math.sin(frame);
-                                frame += 0.1;
+
+                        function animate() {
+                                var n = uniforms.animationRatio.value - 2 | 0,
+                                r = uniforms.animationRatio.value - currentStep,
+                                s = uniforms.stepTimes.value;
+                                n == 0 && (s.x += .01);
+                                n == 1 && (s.y += .01);
+                                n == 2 && (s.z += .01);
+                                n == 3 && (s.w += .01);
+                                currentStep = n;
+                                uniforms.time.value += .004;
 				requestAnimationFrame( animate );
 				render();
 			}
 
 			function render() {
 				renderer.render( scene, camera );
-
 			}
 
                         init();
                         animate();
+                        EKTweener.to(uniforms.fading, 1, { value: 1, ease: "easeInSine"});
+                        EKTweener.to(uniforms.animationRatio, 5, {value: 1, ease: "easeInSine"});
 		</script>
 	</body>
 </html>
