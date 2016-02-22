@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Rebeca | IIEST Shibpur</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <style>
+    body {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+    #landing-logo {
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        opacity: 0;
+    }
+
+    #landing-text-box {
+        opacity: 0;
+        position: absolute;
+        left: 50%;
+        top: 46%;
+        transform: translate(-50%, -50%);
+        color: rgba(255, 255, 255, 0.50);
+        font-weight: bold;
+        text-align: center;
+    }
+
+    #landing-date {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.55);
+        left: 50%;
+        top: 59%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        font-size: 1.2em;
+        font-family: "Roboto Slab";
+        opacity: 0;
+    }
+
+</style>
+</head>
+<body>
+    <div id="container"></div>
+    <img id="landing-logo" src="/img/rebecalogo.png" alt="Rebeca 2016"/>
+    <div id="landing-text-box"></div>
+    <div id="landing-date">31<sup>th</sup>March to 3<sup>rd</sup>April, 2016</div>
+    <script type="text/javascript" src="/js/three.min.js"></script>
+    <script type="text/javascript" src="/js/shaders/CopyShader.js"></script>
+    <script type="text/javascript" src="/js/shaders/RGBShiftShader.js"></script>
+    <script type="text/javascript" src="/js/shaders/DotScreenShader.js"></script>
+    <script type="text/javascript" src="/js/shaders/HorizontalTiltShiftShader.js"></script>
+    <script type="text/javascript" src="/js/shaders/VerticalTiltShiftShader.js"></script>
+    <script type="text/javascript" src="/js/shaders/BlendShader.js"></script>
+    <script type="text/javascript" src="/js/postprocessing/EffectComposer.js"></script>
+    <script type="text/javascript" src="/js/postprocessing/SavePass.js"></script>
+    <script type="text/javascript" src="/js/postprocessing/MaskPass.js"></script>
+    <script type="text/javascript" src="/js/postprocessing/ShaderPass.js"></script>
+    <script type="text/javascript" src="/js/postprocessing/RenderPass.js"></script>
+    <script type="text/javascript" src="/js/libs/EKTweener.min.js"></script>
+    <script type="text/javascript" src="/js/libs/quickLoader.js"></script>
+
+    <script type="text/javascript" src="/js/main.js"></script>
+</body>
+</html>
