@@ -12,7 +12,9 @@ var REBECA = REBECA || {};
     var PARTICLE_FIELD_SEGMENT_SIZE = 200;
     var PARTICLE_FIELD_GRID_SIZE = 2e3;
     var PARTICLE_FIELD_GRID_SEG = 3;
-    var CIRCLE_SPEED = .05;
+    var CIRCLE_SPEED = {
+        value: 0.05
+    };
 
     var A = PARTICLE_FIELD_GRID_SEG; 
     var O = PARTICLE_FIELD_GRID_SIZE;
@@ -32,7 +34,7 @@ var REBECA = REBECA || {};
         animate();
         loadingWriteUp();
         EKTweener.to(circleUniforms.fading, 5, { value: 1, ease: "easeInSine"});
-        EKTweener.to(this.CIRCLE_SPEED, 5, { value: 1, ease: "easeInSine"});
+        EKTweener.to(CIRCLE_SPEED, 8, { value: 0.004, ease: "easeInSine"});
         EKTweener.to(circleUniforms.animationRatio, 10, {value: 1, ease: "easeInSine"});
         setTimeout(function(){ 
             EKTweener.to(camera.position, 5, {y: 300, ease: "easeOutExpo"});
@@ -326,7 +328,7 @@ var REBECA = REBECA || {};
         n == 2 && (s.z += 0.01);
         n == 3 && (s.w += 0.01);
         currentStep = n;
-        circleUniforms.time.value += CIRCLE_SPEED;
+        circleUniforms.time.value += CIRCLE_SPEED.value;
 
         for (var o = 0, c = A * A; o < c; o++) {
             waveUniforms[o].time.value += 0.2;
