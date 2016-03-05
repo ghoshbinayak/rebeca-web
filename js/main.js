@@ -1,9 +1,7 @@
-var REBECA = REBECA || {};
-
-(function(){
+var REBECA = (function(){
     var container;
     var camera, scene, renderer, circleUniforms, composer, sceneClear, cameraClear;
-    var circlePoints, rebecaLogo, logoDate;
+    var circlePoints, rebecaLogo, logoDate, logoButton, mainPage, staticNav;
 
     var windowHalfX = window.innerWidth / 2;
     var windowHalfY = window.innerHeight / 2;
@@ -13,8 +11,9 @@ var REBECA = REBECA || {};
     var PARTICLE_FIELD_GRID_SIZE = 2e3;
     var PARTICLE_FIELD_GRID_SEG = 3;
     var CIRCLE_SPEED = {
-        value: 0.05
+        value: 0.008
     };
+    var CIRCLE_SHOWN = true;
 
     var A = PARTICLE_FIELD_GRID_SEG; 
     var O = PARTICLE_FIELD_GRID_SIZE;
@@ -34,17 +33,20 @@ var REBECA = REBECA || {};
         animate();
         loadingWriteUp();
         EKTweener.to(circleUniforms.fading, 5, { value: 1, ease: "easeInSine"});
-        EKTweener.to(CIRCLE_SPEED, 8, { value: 0.004, ease: "easeInSine"});
+        EKTweener.to(CIRCLE_SPEED, 10, { value: 0.004, ease: "easeInSine"});
         EKTweener.to(circleUniforms.animationRatio, 10, {value: 1, ease: "easeInSine"});
         setTimeout(function(){ 
+            logoButton.style.display ="block";
+            logoDate.style.display ="block";
             EKTweener.to(camera.position, 5, {y: 300, ease: "easeOutExpo"});
             EKTweener.to(circlePoints.position, 5, {y: 330, ease: "easeOutExpo"});
             EKTweener.to(rebecaLogo.style, 5, {opacity: 1, ease: "easeInSine"});            
-            EKTweener.to(logoDate.style, 5, {opacity: 1, ease: "easeInSine"});            
+            EKTweener.to(logoDate.style, 5, {opacity: 1, ease: "easeInSine"});           
+            EKTweener.to(logoButton.style, 5, {opacity: 1, ease: "easeInSine"});            
             for (var o = 0, c = A * A; o < c; o++) {
                 EKTweener.to(waveUniforms[o].fading, 5, {value: 1, ease: "easeInSine"});
             }
-        },  20000);
+        },  12000);
 
     }); 
 
@@ -190,7 +192,7 @@ var REBECA = REBECA || {};
 
     function init() {
         container = document.createElement( 'div' );
-        document.body.appendChild( container );
+        document.getElementById('canvas-container').appendChild( container );
         camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 1, 3000 );
         camera.position.y = -200;
         camera.position.z = 250;
@@ -289,7 +291,7 @@ var REBECA = REBECA || {};
         composer = new THREE.EffectComposer( renderer );
         var h  = new THREE.RenderPass( scene, camera ),
         mt = new THREE.ShaderPass(THREE.RGBShiftShader),
-        yt = new THREE.SavePass,
+        yt = new THREE.SavePass(),
         pt = new THREE.ShaderPass(THREE.HorizontalTiltShiftShader),
         dt = new THREE.ShaderPass(THREE.VerticalTiltShiftShader),
         vt = new THREE.ShaderPass(THREE.BlendShader),
@@ -309,9 +311,14 @@ var REBECA = REBECA || {};
         renderer.setSize( window.innerWidth, window.innerHeight );
         container.appendChild( renderer.domElement );
 
+        mainPage = document.getElementById('content-wrapper');
         rebecaLogo = document.getElementById('landing-logo');
         rebecaLogo.style.width = window.innerHeight*0.4 + "px";
         logoDate = document.getElementById('landing-date');
+        logoDate.style.fontSize = window.innerHeight*0.03 + "px";
+        logoButton = document.getElementById('landing-button');
+        staticNav = document.getElementById('static-nav');
+        logoButton.onclick = showSite;
     }
 
     function moveWave(o, e, t) {
@@ -320,16 +327,18 @@ var REBECA = REBECA || {};
     }
 
     function animate() {
-        var n = circleUniforms.animationRatio.value - 2 | 0,
-        r = circleUniforms.animationRatio.value - currentStep,
-        s = circleUniforms.stepTimes.value;
-        n == 0 && (s.x += 0.01);
-        n == 1 && (s.y += 0.01);
-        n == 2 && (s.z += 0.01);
-        n == 3 && (s.w += 0.01);
-        currentStep = n;
-        circleUniforms.time.value += CIRCLE_SPEED.value;
-
+        if(CIRCLE_SHOWN){
+            var n = circleUniforms.animationRatio.value - 2 | 0,
+            r = circleUniforms.animationRatio.value - currentStep,
+            s = circleUniforms.stepTimes.value;
+            n == 0 && (s.x += 0.01);
+            n == 1 && (s.y += 0.01);
+            n == 2 && (s.z += 0.01);
+            n == 3 && (s.w += 0.01);
+            currentStep = n;
+            circleUniforms.time.value += CIRCLE_SPEED.value;    
+        }
+        
         for (var o = 0, c = A * A; o < c; o++) {
             waveUniforms[o].time.value += 0.2;
         }
@@ -339,13 +348,21 @@ var REBECA = REBECA || {};
     }
 
     function render() {
-        composer.render();
+        if(CIRCLE_SHOWN){
+            composer.render();
+        }
         renderer.render( sceneClear, camera );
     }
 
     function resizeCanvas(){
         camera.aspect = window.innerWidth/window.innerHeight;
-        rebecaLogo.style.width = window.innerHeight*0.4 + "px";
+        if(CIRCLE_SHOWN){
+            rebecaLogo.style.width = window.innerHeight*0.4 + "px";
+        }
+        else{
+            rebecaLogo.style.width = window.innerWidth*0.15 + "px";            
+        }
+        logoDate.style.fontSize = window.innerHeight*0.03 + "px";
         camera.updateProjectionMatrix();
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( window.innerWidth, window.innerHeight );
@@ -353,39 +370,131 @@ var REBECA = REBECA || {};
 
     function loadingWriteUp(){
         var quote1 = "Memories, even your most precious ones,<br> fade surprisingly quickly.",
-            quote2 = "But, some memories which you hold on to never do.",
+            quote2 = "But, some memories <br/> which you hold on to never do.",
             quote3 = "So, to create some more such memories,<br> and to experience the nostalgia...",
             quote4 = "let us indulge,<br> for the 78th time";
         var co = document.getElementById('landing-text-box');
         co.style.opacity = 0;
         co.innerHTML = quote1;
-        EKTweener.to(co.style, 2, {opacity: 1, ease: "easeInSine"});
+        EKTweener.to(co.style, 1, {opacity: 1, ease: "easeInSine"});
         setTimeout(function(){
             EKTweener.to(co.style, 0.8, {opacity: 0, ease: "easeInSine"});
-        }, 5000);
+        }, 3000);
         setTimeout(function(){
             co.innerHTML = quote2;
-            EKTweener.to(co.style, 2, {opacity: 1, ease: "easeInSine"});
+            EKTweener.to(co.style, 1, {opacity: 1, ease: "easeInSine"});
+        }, 4000);
+        setTimeout(function(){
+            EKTweener.to(co.style, 0.8, {opacity: 0, ease: "easeInSine"});
         }, 6000);
         setTimeout(function(){
-            EKTweener.to(co.style, 0.8, {opacity: 0, ease: "easeInSine"});
-        }, 10000);
-        setTimeout(function(){
             co.innerHTML = quote3;
-            EKTweener.to(co.style, 2, {opacity: 1, ease: "easeInSine"});
-        }, 11000);
+            EKTweener.to(co.style, 1, {opacity: 1, ease: "easeInSine"});
+        }, 7000);
         setTimeout(function(){
             EKTweener.to(co.style, 0.8, {opacity: 0, ease: "easeInSine"});
-        }, 15000);
+        }, 9000);
         setTimeout(function(){
             co.innerHTML = quote4;
-            EKTweener.to(co.style, 2, {opacity: 1, ease: "easeInSine"});
-        }, 16000);
+            EKTweener.to(co.style, 1, {opacity: 1, ease: "easeInSine"});
+        }, 10000);
         setTimeout(function(){
             EKTweener.to(co.style, 0.8, {opacity: 0, ease: "easeInSine"});
-        }, 20000);
+        }, 12000);
+    }
+
+    function showSite(){
+        logoButton.style.display = "none";
+        rebecaLogo.style.top = "20px";
+        rebecaLogo.style.left = "20px";
+        rebecaLogo.style.transform = "translateX(0)";
+        rebecaLogo.style.width = window.innerWidth*0.15 + "px";
+        EKTweener.to(camera.position, 1, {z: 0, ease: "easeOutExpo"});
+        EKTweener.to(camera.position, 1, {x: 200, ease: "easeOutExpo"});
+        EKTweener.to(logoDate.style, 0.5, {opacity: 0, ease: "easeInSine"});
+        CIRCLE_SHOWN = false;
+        mainPage.style.display = "block";
+        staticNav.style.display = "block";
+        mainPage.style.left = "20%";
+        mainPage.style.width = "80%";
+        mainPage.style.height = "100%";
+        mainPage.style.top = "0";
+        rebecaLogo.onclick = function () {
+            setPage(1);
+        };
+        rebecaLogo.style.cursor = "pointer";
+        EKTweener.to(mainPage.style, 2, {opacity: 1, ease: "easeInSine"});
+        startSlideshow();
+        initScroll();
+        setTimeout(function(){
+            sceneClear.remove( circlePoints );
+            logoDate.style.display = "none";
+            staticNav.style.opacity = 1;
+        }, 1000);
+    }
+
+    function startSlideshow(){
+        $("#slideshow > div:gt(0)").hide();
+
+        setInterval(function() { 
+          $('#slideshow > div:first')
+            .fadeOut(1000)
+            .next()
+            .fadeIn(1000)
+            .end()
+            .appendTo('#slideshow');
+        },  5000);
+
+        $("#contact-slide > div:gt(0)").hide();
+
+        setInterval(function() { 
+          $('#contact-slide > div:first')
+            .fadeOut(1000)
+            .next()
+            .fadeIn(1000)
+            .end()
+            .appendTo('#contact-slide');
+        },  5000);
+
+
+        $("#sponsor-slide > div:gt(0)").hide();
+
+        setInterval(function() { 
+          $('#sponsor-slide > div:first')
+            .fadeOut(1000)
+            .next()
+            .fadeIn(1000)
+            .end()
+            .appendTo('#sponsor-slide');
+        },  5000);
+    }
+
+    function initScroll(){
+        $(".main").onepage_scroll({
+           sectionContainer: "section",     // sectionContainer accepts any kind of selector in case you don't want to use section
+           easing: "ease",                  // Easing options accepts the CSS3 easing animation such "ease", "linear", "ease-in",
+                                            // "ease-out", "ease-in-out", or even cubic bezier value such as "cubic-bezier(0.175, 0.885, 0.420, 1.310)"
+           animationTime: 1000,             // AnimationTime let you define how long each section takes to animate
+           pagination: true,                // You can either show or hide the pagination. Toggle true for show, false for hide.
+           updateURL: false,                // Toggle this true if you want the URL to be updated automatically when the user scroll to each page.
+           beforeMove: function(index) {},  // This option accepts a callback function. The function will be called before the page moves.
+           afterMove: function(index) {},   // This option accepts a callback function. The function will be called after the page moves.
+           loop: false,                     // You can have the page loop back to the top/bottom when the user navigates at up/down on the first/last page.
+           keyboard: true,                  // You can activate the keyboard controls
+           responsiveFallback: false,        // You can fallback to normal page scroll by defining the width of the browser in which
+                                            // you want the responsive fallback to be triggered. For example, set this to 600 and whenever
+                                            // the browser's width is less than 600, the fallback will kick in.
+           direction: "vertical"            // You can now define the direction of the One Page Scroll animation. Options available are "vertical" and "horizontal". The default value is "vertical".  
+        });
+    }
+
+    function setPage(id){
+        $(".main").moveTo(id);
     }
 
     window.onresize = resizeCanvas;
-    return this;
-}).apply(REBECA);
+
+    return {
+        setPage: setPage
+    };
+})();

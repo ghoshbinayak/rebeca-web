@@ -4,11 +4,14 @@
   <title>Rebeca | IIEST Shibpur</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400' rel='stylesheet' type='text/css'>
+  <link href='/css/onepage-scroll.css' rel='stylesheet' type='text/css'>
   <style>
     body {
         overflow: hidden;
         margin: 0;
         padding: 0;
+        font-family: "Roboto Slab", sans-serif;
     }
 
     #landing-logo {
@@ -18,6 +21,8 @@
         transform: translate(-50%, -50%);
         z-index: 10;
         opacity: 0;
+        -webkit-transition: width 1s, top 1s, left 1s, -webkit-transform 1s;
+        transition: width 1s, top 1s, left 1s, transform 1s;
     }
 
     #landing-text-box {
@@ -41,15 +46,596 @@
         font-size: 1.2em;
         font-family: "Roboto Slab";
         opacity: 0;
+        display: none;
+    }
+
+    #landing-button {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.55);
+        left: 50%;
+        top: 90%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        font-size: 1em;
+        font-family: "Roboto Slab";
+        opacity: 0;
+        display: none;
+    }
+
+    #landing-button:hover {
+        color: rgba(255, 255, 255, 1);
+        cursor: pointer;
+    }
+
+    #content-wrapper {
+        position: absolute;
+        height: 0%;
+        width: 0%;
+        background: rgba(0, 0, 0, 1);
+        left: 100%;
+        top: 50%;
+        -webkit-transition: width 1s, height 1s, top 1s, left 1s, -webkit-transform 1s;
+        transition: width 1s, height 1s, top 1s, left 1s, transform 1s;
+        opacity: 0;
+        /*display: none;*/
+        overflow-x: hidden; 
+    }
+    
+    #static-nav {
+        position: absolute;
+        width: 20%;
+        display: none;
+        color: rgba(255, 255, 255, 0.75);
+        font-family: "Roboto Slab", sans-serif;
+        text-align: center;
+        -webkit-transition: width 1s, height 1s, top 1s, left 1s, opacity 2s, -webkit-transform 1s;
+        transition: width 1s, height 1s, top 1s, left 1s, opacity 2s, transform 2s;
+        overflow: hidden;
+        opacity: 0;
+        margin-top: 20vh;
+        height: 80vh;
+    }
+
+    #static-nav li {
+        list-style: none;
+        text-decoration: none;
+    }
+
+    #static-nav ul {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        line-height: 2.5em;
+        margin-top: 10%;
+        font-size: 0.9em;
+    }
+
+    #static-nav > img {
+        width: 7vh;
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.75;
+    }
+
+    #static-nav a {
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    #static-nav a:hover {
+        text-decoration: none;
+        color: white;
+    }
+
+    #static-nav > #presentedby{
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7em;
+        width: 100%
+    }
+
+    #slideshow { 
+        margin: 0; 
+        position: relative; 
+        width: 100%; 
+        height: 100%; 
+        padding: 0; 
+        box-shadow: 0 0 20px rgba(0,0,0,0.4); 
+    }   
+
+    #slideshow > div { 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0; 
+        background-size: cover;
+        background-position: center;
+        color: white;
+        font-family: "Roboto Slab", sans-serif;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .slide_title {
+        position: absolute;
+        width: auto;
+        left: 50%;
+        transform: translateX(-50%);        
+        color: white;
+        margin-top: 35vh;
+        font-weight: 100;
+        font-size: 1.5em;
+    }
+
+    @-moz-keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        -moz-transform: translateY(0);
+        transform: translateY(0);
+      }
+      40% {
+        -moz-transform: translateY(-20px);
+        transform: translateY(-20px);
+      }
+      60% {
+        -moz-transform: translateY(-15px);
+        transform: translateY(-15px);
+      }
+    }
+    @-webkit-keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+      }
+      40% {
+        -webkit-transform: translateY(-20px);
+        transform: translateY(-20px);
+      }
+      60% {
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+      }
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        -moz-transform: translateY(0);
+        -ms-transform: translateY(0);
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+      }
+      40% {
+        -moz-transform: translateY(-20px);
+        -ms-transform: translateY(-20px);
+        -webkit-transform: translateY(-20px);
+        transform: translateY(-20px);
+      }
+      60% {
+        -moz-transform: translateY(-15px);
+        -ms-transform: translateY(-15px);
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+      }
+    }
+
+    #scroll-down {
+        width: 40px;
+        position: absolute;
+        top: 90vh;
+        left: 45%;
+        translateX(-50%);
+        -moz-animation: bounce 2s infinite;
+        -webkit-animation: bounce 2s infinite;
+        animation: bounce 2s infinite;
+    }
+
+    .sections{
+        height: 100%;
+        background: #087F96;
+        color: white;
+        text-align: center;
+        padding: 5%;
+        padding-top: 5vh;
+        overflow: hidden;
+        font-weight: lighter;
+        font-size: 1.5em;
+    }
+
+    #canvas-container {
+        position: absolute;
+    }
+
+    .contact-card {
+        font-size: 0.7em;
+        font-family: Roboto Slab;
+        text-align: left;
+        width: 27%;
+        float: left;
+        overflow: hidden;
+        padding: 10px;
+        font-weight: normal;
+        margin: 20px;
+        height: 80px;
+    }
+    
+    span.contact-card-desig {
+        font-family: "Roboto Slab";
+        font-size: 0.7em;
+        font-weight: bold;
+    }
+
+    span.contact-card-phone {
+        font-size: 0.8em;
+    }
+
+    .contact-card-photo {
+        width: 80px;
+        height: 80px;
+        float: left;
+        background: white;
+        margin-right: 10px;
+    }
+
+     #contact-slide { 
+        margin: 0; 
+        position: relative; 
+        width: 100%; 
+        height: 100%; 
+        padding: 0; 
+        box-shadow: 0 0 20px rgba(0,0,0,0.4); 
+    }   
+
+    #contact-slide > div { 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0;
+    }
+
+     #sponsor-slide { 
+        margin: 0; 
+        position: relative; 
+        width: 100%; 
+        height: 100%; 
+        padding: 0; 0,0,0.4); 
+    }   
+
+    #sponsor-slide > div { 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0;
+    }
+
+    .sponsor-logo-wrapper {
+        text-align: center;
+        margin: 1em 0;
+        white-space: nowrap;
+        width: 33%;
+        float: left;
+        height: 100px;
+        margin: 20px;
+        display: inline-block;
+        white-space: nowrap;
+        text-align: center; margin: 1em 0;
+    }
+
+    .sponsor-logo-wrapper:before{
+        content: "";
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+
+    .sponsor-logo {
+        vertical-align: middle;
+        max-height: 100px;
+        max-width: 160px;
     }
 
 </style>
 </head>
 <body>
-    <div id="container"></div>
+    <div id="canvas-container"></div>
     <img id="landing-logo" src="/img/rebecalogo.png" alt="Rebeca 2016"/>
     <div id="landing-text-box"></div>
-    <div id="landing-date">31<sup>th</sup>March to 3<sup>rd</sup>April, 2016</div>
+    <div id="landing-date">31<sup>st</sup>March to 3<sup>rd</sup>April, 2016</div>
+    <div id="landing-button">Explore</div>
+    <div id="static-nav">
+        <ul>
+            <li><a href="#" onclick="REBECA.setPage(2);">About</a></li>
+            <li><a href="#" onclick="REBECA.setPage(3);">The Nights</a></li>
+            <li><a href="#" onclick="REBECA.setPage(5);">Events</a></li>
+            <li><a href="#" onclick="REBECA.setPage(6);">Sponsors</a></li>
+            <li><a href="#" onclick="REBECA.setPage(7);">Contact</a></li>
+        </ul>
+        <img src="/img/IIEST.png" alt="IIEST Shibpur" />
+        <span id="presentedby" >presented by IIEST Shibpur </span>
+    </div>
+    <div id="content-wrapper">
+        <div class="main">
+        <section>
+            <div id="slideshow">
+               <div style="background-image: url('/img/rebeca4.jpg')">
+                    <div class="slide_title" style="color: black">Four nights of <span style="background-color: white; color: #565656">extravaganza</span></div>
+               </div>
+               <div style="background-image: url('/img/stage.jpg')">
+                    <div class="slide_title" style="color: black">Four nights of <span style="background-color: white; color: #565656">extacy</span></div>
+               </div>
+               <div style="background-image: url('https://scontent-fra3-1.xx.fbcdn.net/hphotos-xlt1/v/t1.0-9/12743758_984750754937732_777716384972075365_n.jpg?oh=5f3eb33ffdf1917842c8886f9685b601&oe=575134B5')">
+                    <div class="slide_title" >Four nights of <span style="background-color: white; color: #565656">nostalgia</span></div>
+               </div>
+            </div>
+            <div id="scroll-down">
+                <svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" width="100%" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 354.33071 177.16535">
+                <g transform="translate(0 -875.2)">
+                <path style="opacity:0.91;stroke-linejoin:round;stroke:#fff;stroke-linecap:round;stroke-width:37.57;fill:none" d="m33.29 915.7 152.1 103.3 129.7-103.3"/>
+                </g>
+                </svg>
+            </div>
+        </section>
+        <section>
+            <div class="sections" style="padding-top: 20vh; background: #000000">
+                <h1> R E B E C A</h1>
+                <p style="font-weight: normal">Reunion and Bengal Engineering College Annuals</p>
+                <p>From it's very inception in 1932, this has been the annula reunion of the then BE College. Later on it has been transformed into an annual college fest cum reunion, well known for its magnanimity in eastern India. On this 78th edition of REBECA, we believe the unity amongst the students and the ever growing presence of our alumni will be more evident than ever before.</p>
+            </div>
+        </section>
+        <section>
+            <div class="sections" style="background: #087F96;">
+            <img src="/img/classical.png" alt="classical night" style="float: right; margin: 0 30px; width: 270px"/>
+                <h1> Classical Night</h1>
+                <p>The first day of our auspicious fest decorated with amazing performances by well known classical singers and dance groups.</p>
+                <img src="/img/beingsnight.png" alt="classical night" style="float: left; margin: 0 30px; width: 270px"/>
+                <h1 style="margin-top: 150px"> BEings Night</h1>
+                <p>Breath taking performances by our students portraying their talent, including a dance competition 'oscillations'.</p>                
+            </div>
+        </section>      
+        <section>
+            <div class="sections" style="background: #fff; color: black; padding: 0">
+                <img src="/img/kolkata.jpg" alt="classical night" style="float: right; margin-left: 30px; width: 378px;"/>
+                <h1> Kolkata Night</h1>
+                <p>Spell bounding performances by renowned artists and bands from kolkata, giving local artists a huge platform to show their talent.</p>
+                <img src="/img/bollywood.jpg" alt="classical night" style=" float: left; width: 85vh; margin-top: 10vh;"/>   
+                <h1 style="margin-top: 200px;"> Mumbai Night</h1>
+                <p>Sensational performances by various stars from our very beloved Bollywood.</p>
+            </div>
+        </section>
+        <section>
+                <div class="sections"  style="background: #033649;">
+                <h1>Events</h1>
+                <p>To be announced soon.</p>
+            </div>
+        </section>
+        <section>
+                <div class="sections"  style="background: #031634;">
+                <h1>with love and support from..</h1>
+                <div id="sponsor-slide">
+                    <div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/arambagh.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/coalindia.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/coke.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/friendsFM.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/itd.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/pantaloons.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/pedilite.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/sail.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/sbi.png" alt="sponsor logo"></img>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/simoco.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/simplex.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/sp.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/telegraph.png" alt="sponsor logo"></img>
+                        </div>
+                        <div class="sponsor-logo-wrapper">
+                        <img class="sponsor-logo" src="/img/sponsors/ubi.png" alt="sponsor logo"></img>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="sections" style="background: black">
+                <h1>Get in touch</h1>
+                <div id="contact-slide">
+                    <div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Devarpan Mukherjee</span>
+                            <span class="contact-card-desig"><br/>SECRETARY GENERAL</span>
+                            <span class="contact-card-phone"><br/>9883512931</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Anupam Mondal</span>
+                            <span class="contact-card-desig"><br/>SECRETARY GENERAL</span>
+                            <span class="contact-card-phone"><br/>9434641162</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Prince Kumar</span>
+                            <span class="contact-card-desig"><br/>JOINT SECRETARY</span>
+                            <span class="contact-card-phone"><br/>9883512931</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Riyank Roy</span>
+                            <span class="contact-card-desig"><br/>JOINT SECRETARY</span>
+                            <span class="contact-card-phone"><br/>9883512931</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Sahariar Khan</span>
+                            <span class="contact-card-desig"><br/>FINANCE</span>
+                            <span class="contact-card-phone"><br/>9609479108</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Arijit Misra</span>
+                            <span class="contact-card-desig"><br/>FINANCE</span>
+                            <span class="contact-card-phone"><br/>9432341649</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Arjya Majumder</span>
+                            <span class="contact-card-desig"><br/>ALUMNI COLLECTION</span>
+                            <span class="contact-card-phone"><br/>8697514252</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Biswajit Mondal</span>
+                            <span class="contact-card-desig"><br/>ALUMNI COLLECTION</span>
+                            <span class="contact-card-phone"><br/>9851156885</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Soumyodeep Das</span>
+                            <span class="contact-card-desig"><br/>CULTURAL</span>
+                            <span class="contact-card-phone"><br/>8443990121</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Md. Ismile Shaikh</span>
+                            <span class="contact-card-desig"><br/>CULTURAL</span>
+                            <span class="contact-card-phone"><br/>9593792175</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Chittabrata Ghar</span>
+                            <span class="contact-card-desig"><br/>TRAVEL &amp; LOGISTICS</span>
+                            <span class="contact-card-phone"><br/>9874140762</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Soumyodeep Mainan </span>
+                            <span class="contact-card-desig"><br/>TRAVEL &amp; LOGISTICS</span>
+                            <span class="contact-card-phone"><br/>9153177138</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Soumik Acharyya</span>
+                            <span class="contact-card-desig"><br/>STAGE &amp; DECORATION</span>
+                            <span class="contact-card-phone"><br/>8902772030</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Soham Karmakar</span>
+                            <span class="contact-card-desig"><br/>STAGE &amp; DECORATION</span>
+                            <span class="contact-card-phone"><br/>9007566336</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Ayan Roy</span>
+                            <span class="contact-card-desig"><br/>PUBLICATION</span>
+                            <span class="contact-card-phone"><br/>9831927857</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Sayak Banerjee</span>
+                            <span class="contact-card-desig"><br/>PUBLICATION</span>
+                            <span class="contact-card-phone"><br/>8001112745</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Samudra Bhattacharjee</span>
+                            <span class="contact-card-desig"><br/>EVENT MANAGEMENT</span>
+                            <span class="contact-card-phone"><br/>9804651415</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Kaushik Bhakat</span>
+                            <span class="contact-card-desig"><br/>EVENT MANAGEMENT</span>
+                            <span class="contact-card-phone"><br/>8436066350</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Abhirup Mitra</span>
+                            <span class="contact-card-desig"><br/>SPONSORSHIP</span>
+                            <span class="contact-card-phone"><br/>9434477927</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Anandamoy Chatterjee</span>
+                            <span class="contact-card-desig"><br/>SPONSORSHIP</span>
+                            <span class="contact-card-phone"><br/>9830937188</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Somesh Vikrant</span>
+                            <span class="contact-card-desig"><br/>PUBLICITY</span>
+                            <span class="contact-card-phone"><br/>9434225562</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Nirabhra Mondal</span>
+                            <span class="contact-card-desig"><br/>PUBLICITY</span>
+                            <span class="contact-card-phone"><br/>8159028359</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Tinjal Kumar Das</span>
+                            <span class="contact-card-desig"><br/>ALUMNI MEET</span>
+                            <span class="contact-card-phone"><br/>8670015580</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Abdus Samad Shaikh</span>
+                            <span class="contact-card-desig"><br/>ALUMNI MEET</span>
+                            <span class="contact-card-phone"><br/>8420365570</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Partha Pratim Dutta</span>
+                            <span class="contact-card-desig"><br/>COMPETITION &amp; SEMINAR</span>
+                            <span class="contact-card-phone"><br/>9433042238</span>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-photo"></div>
+                            <span class="contact-card-name">Binayak Ghosh</span>
+                            <span class="contact-card-desig"><br/>WEB DESIGN</span>
+                            <span class="contact-card-phone"><br/>9434110169</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    </div>
     <script type="text/javascript" src="/js/three.min.js"></script>
     <script type="text/javascript" src="/js/shaders/CopyShader.js"></script>
     <script type="text/javascript" src="/js/shaders/RGBShiftShader.js"></script>
@@ -64,7 +650,8 @@
     <script type="text/javascript" src="/js/postprocessing/RenderPass.js"></script>
     <script type="text/javascript" src="/js/libs/EKTweener.min.js"></script>
     <script type="text/javascript" src="/js/libs/quickLoader.js"></script>
-
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.onepage-scroll.min.js"></script>
     <script type="text/javascript" src="/js/main.js"></script>
 </body>
 </html>
