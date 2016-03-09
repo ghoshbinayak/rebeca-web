@@ -12,6 +12,7 @@
         margin: 0;
         padding: 0;
         font-family: "Roboto Slab", sans-serif;
+        background: black;
     }
 
     #landing-logo {
@@ -71,14 +72,14 @@
         position: absolute;
         height: 0%;
         width: 0%;
-        background: rgba(0, 0, 0, 1);
+        background: rgba(0, 0, 0, 0.5);
         left: 100%;
         top: 50%;
         -webkit-transition: width 1s, height 1s, top 1s, left 1s, -webkit-transform 1s;
         transition: width 1s, height 1s, top 1s, left 1s, transform 1s;
         opacity: 0;
         /*display: none;*/
-        overflow-x: hidden; 
+        overflow: hidden; 
     }
     
     #static-nav {
@@ -230,11 +231,11 @@
         -moz-animation: bounce 2s infinite;
         -webkit-animation: bounce 2s infinite;
         animation: bounce 2s infinite;
+        cursor: pointer;
     }
 
     .sections{
         height: 100%;
-        background: #087F96;
         color: white;
         text-align: center;
         padding: 5%;
@@ -249,10 +250,10 @@
     }
 
     .contact-card {
-        font-size: 0.7em;
+        font-size: 0.65em;
         font-family: Roboto Slab;
         text-align: left;
-        width: 27%;
+        width: 26%;
         float: left;
         overflow: hidden;
         padding: 10px;
@@ -277,6 +278,7 @@
         float: left;
         background: white;
         margin-right: 10px;
+        background-size: cover; 
     }
 
      #contact-slide { 
@@ -362,16 +364,16 @@
         <section>
             <div id="slideshow">
                <div style="background-image: url('/img/rebeca4.jpg')">
-                    <div class="slide_title" style="color: black">Four nights of <span style="background-color: white; color: #565656">extravaganza</span></div>
+                    <div class="slide_title" style="color: black">Four nights of extravaganza</div>
                </div>
                <div style="background-image: url('/img/stage.jpg')">
-                    <div class="slide_title" style="color: black">Four nights of <span style="background-color: white; color: #565656">extacy</span></div>
+                    <div class="slide_title" style="color: black">Four nights of ecstacy</div>
                </div>
                <div style="background-image: url('https://scontent-fra3-1.xx.fbcdn.net/hphotos-xlt1/v/t1.0-9/12743758_984750754937732_777716384972075365_n.jpg?oh=5f3eb33ffdf1917842c8886f9685b601&oe=575134B5')">
-                    <div class="slide_title" >Four nights of <span style="background-color: white; color: #565656">nostalgia</span></div>
+                    <div class="slide_title" >Four nights of nostalgia</div>
                </div>
             </div>
-            <div id="scroll-down">
+            <div id="scroll-down" onclick="REBECA.setPage(2);">
                 <svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" width="100%" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 354.33071 177.16535">
                 <g transform="translate(0 -875.2)">
                 <path style="opacity:0.91;stroke-linejoin:round;stroke:#fff;stroke-linecap:round;stroke-width:37.57;fill:none" d="m33.29 915.7 152.1 103.3 129.7-103.3"/>
@@ -380,10 +382,10 @@
             </div>
         </section>
         <section>
-            <div class="sections" style="padding-top: 20vh; background: #000000">
+            <div class="sections" style="padding-top: 20vh" >
                 <h1> R E B E C A</h1>
                 <p style="font-weight: normal">Reunion and Bengal Engineering College Annuals</p>
-                <p>From it's very inception in 1932, this has been the annula reunion of the then BE College. Later on it has been transformed into an annual college fest cum reunion, well known for its magnanimity in eastern India. On this 78th edition of REBECA, we believe the unity amongst the students and the ever growing presence of our alumni will be more evident than ever before.</p>
+                <p>From it's very inception in 1932, this has been the annual reunion of the then BE College. Later on it has been transformed into an annual college fest cum reunion, well known for its magnanimity in eastern India. On this 78th edition of REBECA, we believe the unity amongst the students and the ever growing presence of our alumni will be more evident than ever before.</p>
             </div>
         </section>
         <section>
@@ -413,7 +415,7 @@
             </div>
         </section>
         <section>
-                <div class="sections"  style="background: #031634;">
+                <div class="sections"  style="background: #031634; padding-top: 10vh;">
                 <h1>with love and support from..</h1>
                 <div id="sponsor-slide">
                     <div>
@@ -471,55 +473,55 @@
                 <div id="contact-slide">
                     <div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Devarpan Mukherjee.jpg');"></div>
                             <span class="contact-card-name">Devarpan Mukherjee</span>
                             <span class="contact-card-desig"><br/>SECRETARY GENERAL</span>
                             <span class="contact-card-phone"><br/>9883512931</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Anupam Mondal.jpg');"></div>
                             <span class="contact-card-name">Anupam Mondal</span>
                             <span class="contact-card-desig"><br/>SECRETARY GENERAL</span>
                             <span class="contact-card-phone"><br/>9434641162</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Prince Kumar.jpg');"></div>
                             <span class="contact-card-name">Prince Kumar</span>
                             <span class="contact-card-desig"><br/>JOINT SECRETARY</span>
                             <span class="contact-card-phone"><br/>9883512931</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Riyank Roy.jpg');"></div>
                             <span class="contact-card-name">Riyank Roy</span>
                             <span class="contact-card-desig"><br/>JOINT SECRETARY</span>
                             <span class="contact-card-phone"><br/>9883512931</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
-                            <span class="contact-card-name">Sahariar Khan</span>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Sahariar Khan.jpg');"></div>
+                            <span class="contact-card-name" >Sahariar Khan</span>
                             <span class="contact-card-desig"><br/>FINANCE</span>
                             <span class="contact-card-phone"><br/>9609479108</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Arijit Misra.jpg');"></div>
                             <span class="contact-card-name">Arijit Misra</span>
                             <span class="contact-card-desig"><br/>FINANCE</span>
                             <span class="contact-card-phone"><br/>9432341649</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Arjya Majumder.jpg');"></div>
                             <span class="contact-card-name">Arjya Majumder</span>
                             <span class="contact-card-desig"><br/>ALUMNI COLLECTION</span>
                             <span class="contact-card-phone"><br/>8697514252</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Biswajit Mondal.jpg');"></div>
                             <span class="contact-card-name">Biswajit Mondal</span>
                             <span class="contact-card-desig"><br/>ALUMNI COLLECTION</span>
                             <span class="contact-card-phone"><br/>9851156885</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Soumyodeep Das.jpg');"></div>
                             <span class="contact-card-name">Soumyodeep Das</span>
                             <span class="contact-card-desig"><br/>CULTURAL</span>
                             <span class="contact-card-phone"><br/>8443990121</span>
@@ -527,55 +529,55 @@
                     </div>
                     <div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Md. Ismile Shaikh.jpg');"></div>
                             <span class="contact-card-name">Md. Ismile Shaikh</span>
                             <span class="contact-card-desig"><br/>CULTURAL</span>
                             <span class="contact-card-phone"><br/>9593792175</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Chittabrata Ghar.jpg');"></div>
                             <span class="contact-card-name">Chittabrata Ghar</span>
                             <span class="contact-card-desig"><br/>TRAVEL &amp; LOGISTICS</span>
                             <span class="contact-card-phone"><br/>9874140762</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Soumyodeep Mainan.jpg');"></div>
                             <span class="contact-card-name">Soumyodeep Mainan </span>
                             <span class="contact-card-desig"><br/>TRAVEL &amp; LOGISTICS</span>
                             <span class="contact-card-phone"><br/>9153177138</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Soumik Acharyya.jpg');"></div>
                             <span class="contact-card-name">Soumik Acharyya</span>
                             <span class="contact-card-desig"><br/>STAGE &amp; DECORATION</span>
                             <span class="contact-card-phone"><br/>8902772030</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Soham Karmakar.jpg');"></div>
                             <span class="contact-card-name">Soham Karmakar</span>
                             <span class="contact-card-desig"><br/>STAGE &amp; DECORATION</span>
                             <span class="contact-card-phone"><br/>9007566336</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Ayan Roy.jpg');"></div>
                             <span class="contact-card-name">Ayan Roy</span>
                             <span class="contact-card-desig"><br/>PUBLICATION</span>
                             <span class="contact-card-phone"><br/>9831927857</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Sayak Banerjee.jpg');"></div>
                             <span class="contact-card-name">Sayak Banerjee</span>
                             <span class="contact-card-desig"><br/>PUBLICATION</span>
                             <span class="contact-card-phone"><br/>8001112745</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Samudra Bhattacharjee.jpg');"></div>
                             <span class="contact-card-name">Samudra Bhattacharjee</span>
                             <span class="contact-card-desig"><br/>EVENT MANAGEMENT</span>
                             <span class="contact-card-phone"><br/>9804651415</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Kaushik Bhakat.jpg');"></div>
                             <span class="contact-card-name">Kaushik Bhakat</span>
                             <span class="contact-card-desig"><br/>EVENT MANAGEMENT</span>
                             <span class="contact-card-phone"><br/>8436066350</span>
@@ -583,49 +585,49 @@
                     </div>
                     <div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Abhirup Mitra.jpg');"></div>
                             <span class="contact-card-name">Abhirup Mitra</span>
                             <span class="contact-card-desig"><br/>SPONSORSHIP</span>
                             <span class="contact-card-phone"><br/>9434477927</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Anandamoy Chatterjee.jpg');"></div>
                             <span class="contact-card-name">Anandamoy Chatterjee</span>
                             <span class="contact-card-desig"><br/>SPONSORSHIP</span>
                             <span class="contact-card-phone"><br/>9830937188</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Somesh Vikrant.jpg');"></div>
                             <span class="contact-card-name">Somesh Vikrant</span>
                             <span class="contact-card-desig"><br/>PUBLICITY</span>
                             <span class="contact-card-phone"><br/>9434225562</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Nirabhra Mondal.jpg');"></div>
                             <span class="contact-card-name">Nirabhra Mondal</span>
                             <span class="contact-card-desig"><br/>PUBLICITY</span>
                             <span class="contact-card-phone"><br/>8159028359</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Tinjal Kumar Das.jpg');"></div>
                             <span class="contact-card-name">Tinjal Kumar Das</span>
                             <span class="contact-card-desig"><br/>ALUMNI MEET</span>
                             <span class="contact-card-phone"><br/>8670015580</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Abdus Samad Shaikh.jpg');"></div>
                             <span class="contact-card-name">Abdus Samad Shaikh</span>
                             <span class="contact-card-desig"><br/>ALUMNI MEET</span>
                             <span class="contact-card-phone"><br/>8420365570</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Partha Pratim Dutta.jpg');"></div>
                             <span class="contact-card-name">Partha Pratim Dutta</span>
                             <span class="contact-card-desig"><br/>COMPETITION &amp; SEMINAR</span>
                             <span class="contact-card-phone"><br/>9433042238</span>
                         </div>
                         <div class="contact-card">
-                            <div class="contact-card-photo"></div>
+                            <div class="contact-card-photo" style = "background-image: url('/img/members/Binayak Ghosh.jpg');"></div>
                             <span class="contact-card-name">Binayak Ghosh</span>
                             <span class="contact-card-desig"><br/>WEB DESIGN</span>
                             <span class="contact-card-phone"><br/>9434110169</span>
