@@ -12,8 +12,8 @@ var handlebars = require('express-handlebars');
 
 keystone.init({
 
-	'name': 'Aadikara',
-	'brand': 'Aadikara',
+	'name': 'Rebeca',
+	'brand': 'Rebeca',
 	
 	'less': 'public',
 	'static': 'public',
