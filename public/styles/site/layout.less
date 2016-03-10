@@ -1,0 +1,295 @@
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Montserrat-Regular'), url(https://fonts.gstatic.com/s/montserrat/v6/zhcz-_WihjSQC0oHJ9TCYPk_vArhqVIZ0nv9q090hN8.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Montserrat-Bold'), url(https://fonts.gstatic.com/s/montserrat/v6/IQHow_FEYlDC4Gzy_m8fcoWiMMZ7xLd792ULpGE4W_Y.woff2) format('woff2');
+}
+
+@import url(https://fonts.googleapis.com/css?family=Slabo+27px);
+
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto Slab", sans-serif;
+    background: black;
+}
+
+#landing-logo {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    opacity: 0;
+    -webkit-transition: width 1s, top 1s, left 1s, -webkit-transform 1s;
+    transition: width 1s, top 1s, left 1s, transform 1s;
+}
+
+#landing-text-box {
+    opacity: 0;
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.50);
+    font-weight: bold;
+    text-align: center;
+}
+
+#landing-date {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.55);
+    left: 50%;
+    top: 59%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 1.2em;
+    font-family: "Roboto Slab";
+    opacity: 0;
+    display: none;
+}
+
+#landing-button {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.55);
+    left: 50%;
+    top: 90%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 1em;
+    font-family: "Roboto Slab";
+    opacity: 0;
+    display: none;
+}
+
+#landing-button:hover {
+    color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+}
+
+#content-wrapper {
+    position: absolute;
+    height: 0%;
+    width: 0%;
+    background: rgba(0, 0, 0, 0.5);
+    left: 100%;
+    top: 50%;
+    -webkit-transition: width 1s, height 1s, top 1s, left 1s, -webkit-transform 1s;
+    transition: width 1s, height 1s, top 1s, left 1s, transform 1s;
+    opacity: 0;
+    /*display: none;*/
+    overflow: hidden; 
+}
+
+#static-nav {
+    position: absolute;
+    width: 20%;
+    display: none;
+    color: rgba(255, 255, 255, 0.75);
+    font-family: "Roboto Slab", sans-serif;
+    text-align: center;
+    -webkit-transition: width 1s, height 1s, top 1s, left 1s, opacity 2s, -webkit-transform 1s;
+    transition: width 1s, height 1s, top 1s, left 1s, opacity 2s, transform 2s;
+    overflow: hidden;
+    opacity: 0;
+    margin-top: 20vh;
+    height: 80vh;
+}
+
+#static-nav li {
+    list-style: none;
+    text-decoration: none;
+}
+
+#static-nav ul {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 2.5em;
+    margin-top: 10%;
+    font-size: 0.9em;
+}
+
+#static-nav > img {
+    width: 7vh;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.75;
+}
+
+#static-nav a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+#static-nav a:hover {
+    text-decoration: none;
+    color: white;
+}
+
+#static-nav > #presentedby{
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7em;
+    width: 100%
+}
+
+#slideshow { 
+    margin: 0; 
+    position: relative; 
+    width: 100%; 
+    height: 100%; 
+    padding: 0; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.4); 
+}   
+
+#slideshow > div { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-family: "Roboto Slab", sans-serif;
+    text-align: center;
+    font-size: 2em;
+}
+
+.slide_title {
+    position: absolute;
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%);        
+    color: white;
+    margin-top: 35vh;
+    font-weight: 100;
+    font-size: 1.5em;
+}
+
+#scroll-down {
+    width: 40px;
+    position: absolute;
+    top: 90vh;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+.sections{
+    height: 100%;
+    color: white;
+    text-align: center;
+    padding: 5%;
+    padding-top: 5vh;
+    overflow: hidden;
+    font-weight: lighter;
+    font-size: 1.5em;
+}
+
+#canvas-container {
+    position: absolute;
+}
+
+.contact-card {
+    font-size: 0.65em;
+    font-family: Roboto Slab;
+    text-align: left;
+    width: 26%;
+    float: left;
+    overflow: hidden;
+    padding: 10px;
+    font-weight: normal;
+    margin: 20px;
+    height: 80px;
+}
+
+span.contact-card-desig {
+    font-family: "Roboto Slab";
+    font-size: 0.7em;
+    font-weight: bold;
+}
+
+span.contact-card-phone {
+    font-size: 0.8em;
+}
+
+.contact-card-photo {
+    width: 80px;
+    height: 80px;
+    float: left;
+    background: white;
+    margin-right: 10px;
+    background-size: cover; 
+}
+
+ #contact-slide { 
+    margin: 0; 
+    position: relative; 
+    width: 100%; 
+    height: 100%; 
+    padding: 0; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.4); 
+}   
+
+#contact-slide > div { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+}
+
+ #sponsor-slide { 
+    margin: 0; 
+    position: relative; 
+    width: 100%; 
+    height: 100%; 
+    padding: 0;
+}   
+
+#sponsor-slide > div { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+}
+
+.sponsor-logo-wrapper {
+    text-align: center;
+    margin: 1em 0;
+    white-space: nowrap;
+    width: 33%;
+    float: left;
+    height: 100px;
+    margin: 20px;
+    display: inline-block;
+    white-space: nowrap;
+    text-align: center; margin: 1em 0;
+}
+
+.sponsor-logo-wrapper:before{
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.sponsor-logo {
+    vertical-align: middle;
+    max-height: 100px;
+    max-width: 160px;
+}

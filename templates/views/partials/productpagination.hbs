@@ -1,0 +1,15 @@
+<div class="pagination-container">
+    <ul class="pagination">
+            <li {{#unless data.products.previous}}class="disabled"{{/unless}}>
+                    <a href="{{productsPreviousUrl data.products.previous}}">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                    </a>
+            </li>
+            {{{productsNavigation data.products.pages data.products.currentPage data.products.totalPages}}}
+            <li {{#unless data.products.next}}class="disabled"{{/unless}}>
+                    <a href="{{productsNextUrl data.products.next data.products.totalPages}}">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+            </li>
+    </ul>
+</div>

@@ -1,3 +1,70 @@
+var Detector = {
+
+    canvas: !! window.CanvasRenderingContext2D,
+    webgl: ( function () {
+
+        try {
+
+            var canvas = document.createElement( 'canvas' ); return !! ( window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ) );
+
+        } catch ( e ) {
+
+            return false;
+
+        }
+
+    } )(),
+    workers: !! window.Worker,
+    fileapi: window.File && window.FileReader && window.FileList && window.Blob,
+
+    getWebGLErrorMessage: function () {
+
+        var element = document.createElement( 'div' );
+        element.id = 'webgl-error-message';
+        element.style.fontFamily = 'monospace';
+        element.style.fontSize = '13px';
+        element.style.fontWeight = 'normal';
+        element.style.textAlign = 'center';
+        element.style.background = '#fff';
+        element.style.color = '#000';
+        element.style.padding = '1.5em';
+        element.style.width = '400px';
+        element.style.margin = '5em auto 0';
+
+        if ( ! this.webgl ) {
+
+            element.innerHTML = window.WebGLRenderingContext ? [
+                'Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br />',
+                'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.'
+            ].join( '\n' ) : [
+                'Your browser does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br/>',
+                'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.'
+            ].join( '\n' );
+
+        }
+
+        return element;
+
+    },
+
+    addGetWebGLMessage: function ( parameters ) {
+
+        var parent, id, element;
+
+        parameters = parameters || {};
+
+        parent = parameters.parent !== undefined ? parameters.parent : document.body;
+        id = parameters.id !== undefined ? parameters.id : 'oldie';
+
+        element = Detector.getWebGLErrorMessage();
+        element.id = id;
+
+        parent.appendChild( element );
+
+    }
+
+};
+
 var REBECA = (function(){
     var container;
     var camera, scene, renderer, circleUniforms, composer, sceneClear, cameraClear;
@@ -27,28 +94,41 @@ var REBECA = (function(){
 
     var loader = new THREE.TextureLoader();
     var texture;
-    loader.load( "img/colorMap.png", function(loadedtexture, textureData){
-        texture = loadedtexture;
-        init();
-        animate();
-        loadingWriteUp();
-        EKTweener.to(circleUniforms.fading, 5, { value: 1, ease: "easeInSine"});
-        EKTweener.to(CIRCLE_SPEED, 10, { value: 0.004, ease: "easeInSine"});
-        EKTweener.to(circleUniforms.animationRatio, 10, {value: 1, ease: "easeInSine"});
-        setTimeout(function(){ 
-            logoButton.style.display ="block";
-            logoDate.style.display ="block";
-            EKTweener.to(camera.position, 5, {y: 300, ease: "easeOutExpo"});
-            EKTweener.to(circlePoints.position, 5, {y: 330, ease: "easeOutExpo"});
-            EKTweener.to(rebecaLogo.style, 5, {opacity: 1, ease: "easeInSine"});            
-            EKTweener.to(logoDate.style, 5, {opacity: 1, ease: "easeInSine"});           
-            EKTweener.to(logoButton.style, 5, {opacity: 1, ease: "easeInSine"});            
-            for (var o = 0, c = A * A; o < c; o++) {
-                EKTweener.to(waveUniforms[o].fading, 5, {value: 1, ease: "easeInSine"});
-            }
-        },  12000);
 
-    }); 
+    if(Detector.webgl){
+        loader.load( "/images/colorMap.png", function(loadedtexture, textureData){
+            texture = loadedtexture;
+            init();
+            animate();
+            loadingWriteUp();
+            EKTweener.to(circleUniforms.fading, 5, { value: 1, ease: "easeInSine"});
+            EKTweener.to(CIRCLE_SPEED, 10, { value: 0.004, ease: "easeInSine"});
+            EKTweener.to(circleUniforms.animationRatio, 10, {value: 1, ease: "easeInSine"});
+            setTimeout(function(){ 
+                logoButton.style.display ="block";
+                logoDate.style.display ="block";
+                EKTweener.to(camera.position, 5, {y: 300, ease: "easeOutExpo"});
+                EKTweener.to(circlePoints.position, 5, {y: 330, ease: "easeOutExpo"});
+                EKTweener.to(rebecaLogo.style, 5, {opacity: 1, ease: "easeInSine"});            
+                EKTweener.to(logoDate.style, 5, {opacity: 1, ease: "easeInSine"});           
+                EKTweener.to(logoButton.style, 5, {opacity: 1, ease: "easeInSine"});            
+                for (var o = 0, c = A * A; o < c; o++) {
+                    EKTweener.to(waveUniforms[o].fading, 5, {value: 1, ease: "easeInSine"});
+                }
+            },  12000);
+
+        }); 
+    }
+    else{
+        var errorcont = $("<div style=\"text-align: center; position: absolute; color: white; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%);\"></div>");
+        var rebecaLogo = $("<img style=\"margin-left: -20px; dipaly: inline-block; width: 200px;\" alt=\"Rebeca\" src=\"/images/rebecalogo.png\"></img>");
+        var errormsg = $("<p></p>");
+        errormsg.html("March 31<sup>st</sup> to April 3<sup>rd</sup><br><br><br><span style=\"font-size: 2em;\">Oops..</span> <br> Seems your browser is too old. Please update your browser or use a better one.");
+        errorcont.append(rebecaLogo)
+                 .append(errormsg);
+        $('body').append(errorcont);
+        
+    }
 
     var waveUniforms = [];
 

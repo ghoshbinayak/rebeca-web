@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Rebeca | IIEST Shibpur</title>
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400' rel='stylesheet' type='text/css'>
+		<link href="/styles/site.css" rel="stylesheet">
+		<link href='/styles/onepage-scroll.css' rel='stylesheet' type='text/css'>
+		{{!-- This file provides the default styling for the KeystoneJS Content Editor
+			- only renders when user is logged in and admin--}}
+		{{{isAdminEditorCSS user}}}
+
+		{{!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+		//- Safely remove this block if you are not targeting IE8 --}}
+		<!--[if lt IE 9]>
+			<script src="//cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.js"></script>
+			<script src="//cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+	</head>
+	<body>
+		{{{body}}}
+		{{!--
+			//- Customise which Bootstrap javascript files are served by including
+			//- them specifically here, instead of bootstrap-3.3.5.min.js
+		--}}
+		<script src="/js/bootstrap/bootstrap-3.3.5.min.js"></script>
+		{{{isAdminEditorJS user}}}
+	</body>
+</html>
